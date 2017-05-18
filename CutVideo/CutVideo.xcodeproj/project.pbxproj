@@ -23,6 +23,7 @@
 		C50BECB01ECC2666009BACD6 /* demo.MP4 in Resources */ = {isa = PBXBuildFile; fileRef = C50BECAF1ECC2666009BACD6 /* demo.MP4 */; };
 		C50BECB31ECC2905009BACD6 /* VideoClipView.m in Sources */ = {isa = PBXBuildFile; fileRef = C50BECB21ECC2905009BACD6 /* VideoClipView.m */; };
 		C50BECBB1ECC3058009BACD6 /* BBTools.m in Sources */ = {isa = PBXBuildFile; fileRef = C50BECBA1ECC3058009BACD6 /* BBTools.m */; };
+		C5B1DE701ECD387A00C9A5B9 /* UIView+Frame.m in Sources */ = {isa = PBXBuildFile; fileRef = C5B1DE6F1ECD387A00C9A5B9 /* UIView+Frame.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,8 @@
 		C50BECB21ECC2905009BACD6 /* VideoClipView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoClipView.m; sourceTree = "<group>"; };
 		C50BECB91ECC3058009BACD6 /* BBTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BBTools.h; sourceTree = "<group>"; };
 		C50BECBA1ECC3058009BACD6 /* BBTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BBTools.m; sourceTree = "<group>"; };
+		C5B1DE6E1ECD387A00C9A5B9 /* UIView+Frame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Frame.h"; sourceTree = "<group>"; };
+		C5B1DE6F1ECD387A00C9A5B9 /* UIView+Frame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Frame.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +144,8 @@
 		C50BECB41ECC2949009BACD6 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C5B1DE6E1ECD387A00C9A5B9 /* UIView+Frame.h */,
+				C5B1DE6F1ECD387A00C9A5B9 /* UIView+Frame.m */,
 				C50BECB11ECC2905009BACD6 /* VideoClipView.h */,
 				C50BECB21ECC2905009BACD6 /* VideoClipView.m */,
 				C50BECAD1ECC23C5009BACD6 /* VideoClipView.xib */,
@@ -231,6 +236,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5B1DE701ECD387A00C9A5B9 /* UIView+Frame.m in Sources */,
 				C50BECA71ECC2259009BACD6 /* LLAddAudioCommand.m in Sources */,
 				C50BECAB1ECC2259009BACD6 /* LLVideoData.m in Sources */,
 				C50BECA81ECC2259009BACD6 /* LLAddLayerCommand.m in Sources */,

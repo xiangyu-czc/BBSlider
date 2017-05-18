@@ -7,6 +7,8 @@
 //
 
 #import "VideoClipView.h"
+#import "UIView+Frame.h"
+#import <Foundation/Foundation.h>
 
 //设置rgb颜色
 #define VC_RGBA(r,g,b,a)  [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
@@ -22,8 +24,8 @@
 @property (nonatomic,strong)UIView *sliderView;
 @property (nonatomic,strong)UIView *leftView;
 @property (nonatomic,strong)UIView *rightView;
-@property (nonatomic,strong)UIButton *leftBtn;
-@property (nonatomic,strong)UIButton *rightBtn;
+@property (nonatomic,strong)UIImageView *leftBtn;
+@property (nonatomic,strong)UIImageView *rightBtn;
 
 @end
 
@@ -56,30 +58,37 @@
     self.leftView.backgroundColor = VC_RGBA(48, 48, 48, 0.8);
     self.leftView.frame = CGRectMake(0, 0, leftViewWidth, 45);
     [self.thumbnailView addSubview:self.leftView];
+    self.leftView.backgroundColor = [UIColor redColor];
     
     
-    self.leftBtn = [[UIButton alloc] init];
-    [self.leftBtn setImage:[UIImage imageNamed:@"btn_trimright"] forState:UIControlStateNormal];
+    self.leftBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimright"]];
+    self.leftBtn.userInteractionEnabled = YES;
     self.leftBtn.frame = CGRectMake(leftViewWidth, 0, leftBtnWidth, 45);
     [self.thumbnailView addSubview:self.leftBtn];
+    UIPanGestureRecognizer *leftPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(leftBtnAct:)];
+    [self.leftBtn addGestureRecognizer:leftPanGes];
     
     
     self.sliderView = [[UIView alloc] init];
     self.sliderView.backgroundColor = VC_RGBA(48, 48, 48, 0.0);
     self.sliderView.frame = CGRectMake(leftViewWidth+leftBtnWidth, 0, sliderViewWidth, 45);
     [self.thumbnailView addSubview:self.sliderView];
+    self.sliderView.backgroundColor = [UIColor greenColor];
     
     
-    self.rightBtn = [[UIButton alloc] init];
-    [self.rightBtn setImage:[UIImage imageNamed:@"btn_trimleft"] forState:UIControlStateNormal];
+    self.rightBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimleft"]];
+    self.rightBtn.userInteractionEnabled = YES;
     self.rightBtn.frame = CGRectMake(leftViewWidth+leftBtnWidth+sliderViewWidth, 0, leftBtnWidth, 45);
     [self.thumbnailView addSubview:self.rightBtn];
+    UIPanGestureRecognizer *rightPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(rightBtnAct:)];
+    [self.rightBtn addGestureRecognizer:rightPanGes];
     
     
     self.rightView = [[UIView alloc] init];
     self.rightView.backgroundColor = VC_RGBA(48, 48, 48, 0.8);
     self.rightView.frame = CGRectMake(leftViewWidth+leftBtnWidth*2+sliderViewWidth, 0, leftViewWidth, 45);
     [self.thumbnailView addSubview:self.rightView];
+    self.rightView.backgroundColor = [UIColor orangeColor];
     
 }
 
@@ -143,6 +152,53 @@
     
     
 }
+
+-(void)leftBtnAct:(UIPanGestureRecognizer *)pan{
+    
+
+    [pan.view.superview bringSubviewToFront:pan.view];
+    if (pan.state == UIGestureRecognizerStateBegan || pan.state == UIGestureRecognizerStateChanged) {
+    
+        CGPoint translation = [pan translationInView:pan.view.superview];
+        CGPoint newCenter = (CGPoint){pan.view.center.x + translation.x, pan.view.center.y};
+        newCenter.x = MAX(pan.view.frame.size.width/2, newCenter.x);
+        newCenter.x = MIN(self.rightBtn.maxX - pan.view.frame.size.width/2,newCenter.x);
+        [pan.view setCenter:newCenter];
+        [pan setTranslation:CGPointZero inView:self.thumbnailView];
+        
+        
+        self.leftView.width = self.leftBtn.frame.origin.x;
+        self.leftView.originX = 0;
+        self.sliderView.originX = pan.view.maxX;
+        self.sliderView.width = self.rightBtn.originX - pan.view.maxX;
+        
+        
+    }
+}
+
+-(void)rightBtnAct:(UIPanGestureRecognizer *)pan{
+    
+    [pan.view.superview bringSubviewToFront:pan.view];
+    if (pan.state == UIGestureRecognizerStateBegan || pan.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [pan translationInView:pan.view.superview];
+        CGPoint newCenter = (CGPoint){pan.view.center.x + translation.x, pan.view.center.y};
+        newCenter.x = MAX(pan.view.frame.size.width/2, newCenter.x);
+        newCenter.x = MIN((VC_SCREEN_WIDTH - self.leftBtn.width) - pan.view.frame.size.width/2,newCenter.x);
+        [pan.view setCenter:newCenter];
+        [pan setTranslation:CGPointZero inView:pan.view.superview];
+        
+        
+        self.rightView.width = VC_SCREEN_WIDTH - pan.view.maxX;
+        self.rightView.originX = self.rightBtn.maxX;
+        self.sliderView.width = self.rightBtn.originX - self.leftBtn.maxX;
+        self.sliderView.originX = self.leftBtn.maxX;
+        
+    }
+}
+
+
+
+
 
 
 @end
