@@ -15,9 +15,11 @@
 #define VC_SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 
 
-@interface VideoClipView()
+@interface VideoClipView()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
-@property (weak, nonatomic) IBOutlet UIView *thumbnailView;
+//@property (weak, nonatomic) IBOutlet UIView *thumbnailView;
+
+@property (weak, nonatomic) IBOutlet UICollectionView *thumbnailView;
 @property (nonatomic,strong)NSMutableArray *imgViews;
 
 //about slider
@@ -43,63 +45,73 @@
 -(void)awakeFromNib{
     [super awakeFromNib];
     
-    for (int i=0; i<20; i++) {
-        UIImageView *imgView = [[UIImageView alloc] init];
-        imgView.frame = CGRectMake(i*45, 0, 45, 45);
-        [self.thumbnailView addSubview:imgView];
-        [self.imgViews addObject:imgView];
-    }
     
-    CGFloat sliderViewWidth = 150;
-    CGFloat leftBtnWidth = 12;
-    CGFloat leftViewWidth = (VC_SCREEN_WIDTH - 150)/2;
-    
-    self.leftView = [[UIView alloc] init];
-    self.leftView.backgroundColor = VC_RGBA(48, 48, 48, 0.8);
-    self.leftView.frame = CGRectMake(0, 0, leftViewWidth, 45);
-    [self.thumbnailView addSubview:self.leftView];
-    self.leftView.backgroundColor = [UIColor redColor];
+    self.thumbnailView.delegate = self;
+    self.thumbnailView.dataSource = self;
+    [self.thumbnailView registerClass:[ThumCell class] forCellWithReuseIdentifier:@"cell"];
     
     
-    self.leftBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimright"]];
-    self.leftBtn.userInteractionEnabled = YES;
-    self.leftBtn.frame = CGRectMake(leftViewWidth, 0, leftBtnWidth, 45);
-    [self.thumbnailView addSubview:self.leftBtn];
-    UIPanGestureRecognizer *leftPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(leftBtnAct:)];
-    [self.leftBtn addGestureRecognizer:leftPanGes];
     
     
-    self.sliderView = [[UIView alloc] init];
-    self.sliderView.backgroundColor = VC_RGBA(48, 48, 48, 0.0);
-    self.sliderView.frame = CGRectMake(leftViewWidth+leftBtnWidth, 0, sliderViewWidth, 45);
-    [self.thumbnailView addSubview:self.sliderView];
-    self.sliderView.backgroundColor = [UIColor greenColor];
+//    for (int i=0; i<20; i++) {
+//        UIImageView *imgView = [[UIImageView alloc] init];
+//        imgView.frame = CGRectMake(i*45, 0, 45, 45);
+//        [self.thumbnailView addSubview:imgView];
+//        [self.imgViews addObject:imgView];
+//    }
     
+//    UIView *thumContentView = [[UIView alloc] initWithFrame:self.thumbnailView.bounds];
+//    thumContentView.backgroundColor = [UIColor blueColor];
+//    [self.thumbnailView addSubview:thumContentView];
     
-    self.rightBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimleft"]];
-    self.rightBtn.userInteractionEnabled = YES;
-    self.rightBtn.frame = CGRectMake(leftViewWidth+leftBtnWidth+sliderViewWidth, 0, leftBtnWidth, 45);
-    [self.thumbnailView addSubview:self.rightBtn];
-    UIPanGestureRecognizer *rightPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(rightBtnAct:)];
-    [self.rightBtn addGestureRecognizer:rightPanGes];
-    
-    
-    self.rightView = [[UIView alloc] init];
-    self.rightView.backgroundColor = VC_RGBA(48, 48, 48, 0.8);
-    self.rightView.frame = CGRectMake(leftViewWidth+leftBtnWidth*2+sliderViewWidth, 0, leftViewWidth, 45);
-    [self.thumbnailView addSubview:self.rightView];
-    self.rightView.backgroundColor = [UIColor orangeColor];
+//    CGFloat sliderViewWidth = 150;
+//    CGFloat leftBtnWidth = 12;
+//    CGFloat leftViewWidth = (VC_SCREEN_WIDTH - 150)/2;
+//    
+//    self.leftView = [[UIView alloc] init];
+//    self.leftView.backgroundColor = VC_RGBA(48, 48, 48, 0.8);
+//    self.leftView.frame = CGRectMake(0, 0, leftViewWidth, 45);
+//    [thumContentView addSubview:self.leftView];
+//    self.leftView.backgroundColor = [UIColor redColor];
+//    
+//    
+//    self.leftBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimright"]];
+//    self.leftBtn.userInteractionEnabled = YES;
+//    self.leftBtn.frame = CGRectMake(leftViewWidth, 0, leftBtnWidth, 45);
+//    [thumContentView addSubview:self.leftBtn];
+//    UIPanGestureRecognizer *leftPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(leftBtnAct:)];
+//    [self.leftBtn addGestureRecognizer:leftPanGes];
+//    
+//    
+//    self.sliderView = [[UIView alloc] init];
+//    self.sliderView.backgroundColor = VC_RGBA(48, 48, 48, 0.0);
+//    self.sliderView.frame = CGRectMake(leftViewWidth+leftBtnWidth, 0, sliderViewWidth, 45);
+//    [thumContentView addSubview:self.sliderView];
+//    self.sliderView.backgroundColor = [UIColor greenColor];
+//    
+//    
+//    self.rightBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimleft"]];
+//    self.rightBtn.userInteractionEnabled = YES;
+//    self.rightBtn.frame = CGRectMake(leftViewWidth+leftBtnWidth+sliderViewWidth, 0, leftBtnWidth, 45);
+//    [thumContentView addSubview:self.rightBtn];
+//    UIPanGestureRecognizer *rightPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(rightBtnAct:)];
+//    [self.rightBtn addGestureRecognizer:rightPanGes];
+//    
+//    
+//    self.rightView = [[UIView alloc] init];
+//    self.rightView.backgroundColor = VC_RGBA(48, 48, 48, 0.8);
+//    self.rightView.frame = CGRectMake(leftViewWidth+leftBtnWidth*2+sliderViewWidth, 0, leftViewWidth, 45);
+//    [thumContentView addSubview:self.rightView];
+//    self.rightView.backgroundColor = [UIColor orangeColor];
     
 }
 
 #pragma mark - setter && getter
 
 -(void)setImges:(NSMutableArray *)imges{
-    for (int i=0;i<imges.count;i++) {
-        UIImageView *imgView = self.imgViews[i];
-        UIImage *img = imges[i];
-        imgView.image = img;
-    }
+    
+    _imges = imges;
+    [self.thumbnailView reloadData];
 }
 
 
@@ -182,8 +194,8 @@
     if (pan.state == UIGestureRecognizerStateBegan || pan.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [pan translationInView:pan.view.superview];
         CGPoint newCenter = (CGPoint){pan.view.center.x + translation.x, pan.view.center.y};
-        newCenter.x = MAX(pan.view.frame.size.width/2, newCenter.x);
-        newCenter.x = MIN((VC_SCREEN_WIDTH - self.leftBtn.width) - pan.view.frame.size.width/2,newCenter.x);
+//        newCenter.x = MAX(pan.view.frame.size.width/2, newCenter.x);
+//        newCenter.x = MIN((VC_SCREEN_WIDTH - self.leftBtn.maxX) - pan.view.frame.size.width/2,newCenter.x);
         [pan.view setCenter:newCenter];
         [pan setTranslation:CGPointZero inView:pan.view.superview];
         
@@ -197,8 +209,18 @@
 }
 
 
-
-
+#pragma mark - UICollectionViewDataSource
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section;
+{
+    return self.imges.count;
+}
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath;
+{
+    ThumCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    UIImage *img = self.imges[indexPath.item];
+    cell.img = img;
+    return cell;
+}
 
 
 @end
@@ -207,8 +229,28 @@
 
 
 
+@interface ThumCell()
 
+@property (nonatomic,strong)UIImageView *imgView;
 
+@end
+@implementation ThumCell
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.imgView = [[UIImageView alloc] initWithFrame:self.bounds];
+        [self.contentView addSubview:self.imgView];
+    }
+    return self;
+}
+
+-(void)setImg:(UIImage *)img{
+    _img = img;
+    self.imgView.image = img;
+}
+
+@end
 
 
 

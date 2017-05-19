@@ -33,3 +33,19 @@ typedef void(^ConfirmBtnBlock)();
 @end
 
 
+
+@interface ThumCell : UICollectionViewCell
+
+@property (nonatomic,strong)UIImage *img;
+
+@end
+
+
+
+
+
+
+
+
+
+

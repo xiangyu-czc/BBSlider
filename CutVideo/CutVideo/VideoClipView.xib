@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -57,13 +57,19 @@
                         <action selector="twoClip" destination="iN0-l3-epB" eventType="touchUpInside" id="KqF-f5-Csa"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HC5-ju-5CD">
-                    <rect key="frame" x="0.0" y="83" width="375" height="45"/>
-                    <color key="backgroundColor" red="0.15294117647058825" green="0.15294117647058825" blue="0.15294117647058825" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="vTj-rR-H3k">
+                    <rect key="frame" x="10" y="83" width="355" height="45"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="45" id="98V-gU-QF9"/>
+                        <constraint firstAttribute="height" constant="45" id="hG3-ql-iiV"/>
                     </constraints>
-                </view>
+                    <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="1" id="pkz-9k-9MG">
+                        <size key="itemSize" width="50" height="50"/>
+                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    </collectionViewFlowLayout>
+                </collectionView>
             </subviews>
             <color key="backgroundColor" red="0.15294117647058825" green="0.15294117647058825" blue="0.15294117647058825" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -71,20 +77,20 @@
                 <constraint firstItem="2QD-dO-Ij2" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" id="3x5-oh-dQ4"/>
                 <constraint firstAttribute="trailing" secondItem="2QD-dO-Ij2" secondAttribute="trailing" constant="16" id="HHk-Lv-4vp"/>
                 <constraint firstItem="2QD-dO-Ij2" firstAttribute="centerY" secondItem="8Rz-J4-ZdU" secondAttribute="centerY" id="M7r-3a-vLc"/>
+                <constraint firstAttribute="trailing" secondItem="vTj-rR-H3k" secondAttribute="trailing" constant="10" id="OCl-EN-QHw"/>
                 <constraint firstItem="gRj-ej-lh5" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="TA6-1h-m6J"/>
+                <constraint firstItem="vTj-rR-H3k" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="10" id="UXP-XI-evU"/>
                 <constraint firstAttribute="bottom" secondItem="gRj-ej-lh5" secondAttribute="bottom" constant="16" id="V7H-cJ-CPl"/>
                 <constraint firstItem="YMd-Zs-7Ee" firstAttribute="leading" secondItem="GWm-65-1nj" secondAttribute="trailing" constant="70" id="eUj-kW-TlT"/>
-                <constraint firstItem="HC5-ju-5CD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="h3f-q1-6Hn"/>
                 <constraint firstItem="2QD-dO-Ij2" firstAttribute="leading" secondItem="8Rz-J4-ZdU" secondAttribute="trailing" constant="70" id="ho2-ng-Wtq"/>
+                <constraint firstItem="vTj-rR-H3k" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="10" id="lUb-jR-4yR"/>
                 <constraint firstItem="GWm-65-1nj" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="p5K-JT-QZz"/>
-                <constraint firstAttribute="trailing" secondItem="HC5-ju-5CD" secondAttribute="trailing" id="rbW-UZ-Zcu"/>
-                <constraint firstItem="HC5-ju-5CD" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" constant="10" id="sWA-la-Yyi"/>
                 <constraint firstItem="YMd-Zs-7Ee" firstAttribute="centerY" secondItem="GWm-65-1nj" secondAttribute="centerY" id="yWo-Jj-MRj"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="thumbnailView" destination="HC5-ju-5CD" id="fMF-XC-aNA"/>
+                <outlet property="thumbnailView" destination="vTj-rR-H3k" id="7AN-1A-9s4"/>
             </connections>
             <point key="canvasLocation" x="-209.5" y="-25.5"/>
         </view>
