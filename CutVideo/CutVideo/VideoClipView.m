@@ -17,15 +17,16 @@
 
 @interface VideoClipView()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
-//@property (weak, nonatomic) IBOutlet UIView *thumbnailView;
+
 
 @property (weak, nonatomic) IBOutlet UICollectionView *thumbnailView;
 @property (nonatomic,strong)NSMutableArray *imgViews;
 
-//about slider
-@property (nonatomic,strong)UIView *sliderView;
-@property (nonatomic,strong)UIView *leftView;
-@property (nonatomic,strong)UIView *rightView;
+@property (nonatomic,strong)UIView *theView;
+@property (nonatomic,strong)CAGradientLayer *gradientLayer;
+@property (nonatomic,strong)CAGradientLayer *gradientLayer2;
+
+
 @property (nonatomic,strong)UIImageView *leftBtn;
 @property (nonatomic,strong)UIImageView *rightBtn;
 
@@ -42,67 +43,77 @@
     return self;
 }
 
+-(void)layoutSubviews{
+    [super layoutSubviews];
+    
+    self.theView.frame = self.thumbnailView.bounds;
+    self.gradientLayer.frame = self.theView.bounds;
+    self.gradientLayer2.frame = self.theView.bounds;
+    
+    //设置颜色分割点（范围：0-1）
+    float p1 = 120/self.theView.width;
+    self.gradientLayer.locations = @[@(p1), @(p1)];
+    self.gradientLayer2.locations = @[@(1-p1), @(1-p1)];
+    
+    self.leftBtn.frame = CGRectMake(120, 0, 12, 45);
+    self.rightBtn.frame = CGRectMake(self.thumbnailView.width-120-12, 0, 12, 45);
+}
+
 -(void)awakeFromNib{
     [super awakeFromNib];
     
+    [self layoutIfNeeded];
     
     self.thumbnailView.delegate = self;
     self.thumbnailView.dataSource = self;
     [self.thumbnailView registerClass:[ThumCell class] forCellWithReuseIdentifier:@"cell"];
     
     
+    //初始化我们需要改变背景色的UIView，并添加在视图上
+    self.theView = [[UIView alloc] init];
+    [self.thumbnailView addSubview:self.theView];
+    
+    //初始化CAGradientlayer对象，使它的大小为UIView的大小
+    self.gradientLayer = [CAGradientLayer layer];
+    self.gradientLayer.actions = @{@"locations":[NSNull null]};
+    self.gradientLayer.startPoint = CGPointMake(0, 0);
+    self.gradientLayer.endPoint = CGPointMake(1, 0);
+    self.gradientLayer.colors = @[(__bridge id)VC_RGBA(48, 48, 48, 0.8).CGColor,
+                                  (__bridge id)VC_RGBA(48, 48, 48, 0.0).CGColor,
+                                  ];
+    [self.theView.layer addSublayer:self.gradientLayer];
+    
+    self.gradientLayer2 = [CAGradientLayer layer];
+    self.gradientLayer2.actions = @{@"locations":[NSNull null]};
+    self.gradientLayer2.startPoint = CGPointMake(0, 0);
+    self.gradientLayer2.endPoint = CGPointMake(1, 0);
+    self.gradientLayer2.colors = @[(__bridge id)VC_RGBA(48, 48, 48, 0.0).CGColor,
+                                   (__bridge id)VC_RGBA(48, 48, 48, 0.8).CGColor,
+                                   ];
+    [self.theView.layer addSublayer:self.gradientLayer2];
     
     
-//    for (int i=0; i<20; i++) {
-//        UIImageView *imgView = [[UIImageView alloc] init];
-//        imgView.frame = CGRectMake(i*45, 0, 45, 45);
-//        [self.thumbnailView addSubview:imgView];
-//        [self.imgViews addObject:imgView];
-//    }
     
-//    UIView *thumContentView = [[UIView alloc] initWithFrame:self.thumbnailView.bounds];
-//    thumContentView.backgroundColor = [UIColor blueColor];
-//    [self.thumbnailView addSubview:thumContentView];
+   
     
-//    CGFloat sliderViewWidth = 150;
-//    CGFloat leftBtnWidth = 12;
-//    CGFloat leftViewWidth = (VC_SCREEN_WIDTH - 150)/2;
-//    
-//    self.leftView = [[UIView alloc] init];
-//    self.leftView.backgroundColor = VC_RGBA(48, 48, 48, 0.8);
-//    self.leftView.frame = CGRectMake(0, 0, leftViewWidth, 45);
-//    [thumContentView addSubview:self.leftView];
-//    self.leftView.backgroundColor = [UIColor redColor];
-//    
-//    
-//    self.leftBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimright"]];
-//    self.leftBtn.userInteractionEnabled = YES;
-//    self.leftBtn.frame = CGRectMake(leftViewWidth, 0, leftBtnWidth, 45);
-//    [thumContentView addSubview:self.leftBtn];
-//    UIPanGestureRecognizer *leftPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(leftBtnAct:)];
-//    [self.leftBtn addGestureRecognizer:leftPanGes];
-//    
-//    
-//    self.sliderView = [[UIView alloc] init];
-//    self.sliderView.backgroundColor = VC_RGBA(48, 48, 48, 0.0);
-//    self.sliderView.frame = CGRectMake(leftViewWidth+leftBtnWidth, 0, sliderViewWidth, 45);
-//    [thumContentView addSubview:self.sliderView];
-//    self.sliderView.backgroundColor = [UIColor greenColor];
-//    
-//    
-//    self.rightBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimleft"]];
-//    self.rightBtn.userInteractionEnabled = YES;
-//    self.rightBtn.frame = CGRectMake(leftViewWidth+leftBtnWidth+sliderViewWidth, 0, leftBtnWidth, 45);
-//    [thumContentView addSubview:self.rightBtn];
-//    UIPanGestureRecognizer *rightPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(rightBtnAct:)];
-//    [self.rightBtn addGestureRecognizer:rightPanGes];
-//    
-//    
-//    self.rightView = [[UIView alloc] init];
-//    self.rightView.backgroundColor = VC_RGBA(48, 48, 48, 0.8);
-//    self.rightView.frame = CGRectMake(leftViewWidth+leftBtnWidth*2+sliderViewWidth, 0, leftViewWidth, 45);
-//    [thumContentView addSubview:self.rightView];
-//    self.rightView.backgroundColor = [UIColor orangeColor];
+    
+    
+    
+    
+
+    self.leftBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimright"]];
+    self.leftBtn.userInteractionEnabled = YES;
+    [self.theView addSubview:self.leftBtn];
+    UIPanGestureRecognizer *leftPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(leftBtnAct:)];
+    [self.leftBtn addGestureRecognizer:leftPanGes];
+
+    
+    self.rightBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimleft"]];
+    self.rightBtn.userInteractionEnabled = YES;
+    [self.thumbnailView addSubview:self.rightBtn];
+    UIPanGestureRecognizer *rightPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(rightBtnAct:)];
+    [self.rightBtn addGestureRecognizer:rightPanGes];
+
     
 }
 
@@ -174,15 +185,16 @@
         CGPoint translation = [pan translationInView:pan.view.superview];
         CGPoint newCenter = (CGPoint){pan.view.center.x + translation.x, pan.view.center.y};
         newCenter.x = MAX(pan.view.frame.size.width/2, newCenter.x);
-        newCenter.x = MIN(self.rightBtn.maxX - pan.view.frame.size.width/2,newCenter.x);
+        newCenter.x = MIN(self.rightBtn.originX - pan.view.frame.size.width/2,newCenter.x);
+//        [CATransaction begin];
+//        [CATransaction setDisableActions:YES];
+        float f = (newCenter.x/self.thumbnailView.width)/1.0;
+        self.gradientLayer.locations = @[@(f), @(f)];
         [pan.view setCenter:newCenter];
         [pan setTranslation:CGPointZero inView:self.thumbnailView];
+//        [CATransaction commit];
         
-        
-        self.leftView.width = self.leftBtn.frame.origin.x;
-        self.leftView.originX = 0;
-        self.sliderView.originX = pan.view.maxX;
-        self.sliderView.width = self.rightBtn.originX - pan.view.maxX;
+     
         
         
     }
@@ -194,16 +206,12 @@
     if (pan.state == UIGestureRecognizerStateBegan || pan.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [pan translationInView:pan.view.superview];
         CGPoint newCenter = (CGPoint){pan.view.center.x + translation.x, pan.view.center.y};
-//        newCenter.x = MAX(pan.view.frame.size.width/2, newCenter.x);
-//        newCenter.x = MIN((VC_SCREEN_WIDTH - self.leftBtn.maxX) - pan.view.frame.size.width/2,newCenter.x);
+        newCenter.x = MAX(MIN(newCenter.x, self.thumbnailView.frame.size.width - pan.view.frame.size.width/2) , self.leftBtn.maxX +pan.view.frame.size.width/2);
+        pan.view.center = newCenter;
+        float f = (newCenter.x/self.thumbnailView.width)/1.0;
+        self.gradientLayer2.locations = @[@(f), @(f)];
         [pan.view setCenter:newCenter];
         [pan setTranslation:CGPointZero inView:pan.view.superview];
-        
-        
-        self.rightView.width = VC_SCREEN_WIDTH - pan.view.maxX;
-        self.rightView.originX = self.rightBtn.maxX;
-        self.sliderView.width = self.rightBtn.originX - self.leftBtn.maxX;
-        self.sliderView.originX = self.leftBtn.maxX;
         
     }
 }
