@@ -42,16 +42,22 @@
                     </state>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YMd-Zs-7Ee">
-                    <rect key="frame" x="110" y="20" width="24" height="24"/>
-                    <color key="backgroundColor" red="0.1764705882352941" green="0.1764705882352941" blue="0.1764705882352941" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <rect key="frame" x="110" y="14.5" width="35" height="35"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="35" id="B4r-hN-as0"/>
+                        <constraint firstAttribute="height" constant="35" id="nOg-GE-1vo"/>
+                    </constraints>
                     <state key="normal" image="icon_trimoutside"/>
                     <connections>
                         <action selector="oneClip" destination="iN0-l3-epB" eventType="touchUpInside" id="b3V-uw-8Ly"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Rz-J4-ZdU">
-                    <rect key="frame" x="241" y="20" width="24" height="24"/>
-                    <color key="backgroundColor" red="0.1764705882352941" green="0.1764705882352941" blue="0.1764705882352941" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <rect key="frame" x="230" y="14.5" width="35" height="35"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="35" id="Mpg-qd-eEQ"/>
+                        <constraint firstAttribute="height" constant="35" id="wSP-W4-c8r"/>
+                    </constraints>
                     <state key="normal" image="icon_triminside"/>
                     <connections>
                         <action selector="twoClip" destination="iN0-l3-epB" eventType="touchUpInside" id="KqF-f5-Csa"/>
@@ -90,7 +96,9 @@
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="oneBtn" destination="YMd-Zs-7Ee" id="kAc-Cr-TgH"/>
                 <outlet property="thumbnailView" destination="vTj-rR-H3k" id="7AN-1A-9s4"/>
+                <outlet property="twoBtn" destination="8Rz-J4-ZdU" id="yhg-J3-eMB"/>
             </connections>
             <point key="canvasLocation" x="-209.5" y="-25.5"/>
         </view>

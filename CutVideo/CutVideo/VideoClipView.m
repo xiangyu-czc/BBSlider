@@ -20,6 +20,8 @@
 @interface VideoClipView()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 
+@property (weak, nonatomic) IBOutlet UIButton *oneBtn;
+@property (weak, nonatomic) IBOutlet UIButton *twoBtn;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *thumbnailView;
 @property (nonatomic,strong)NSMutableArray *imgViews;
@@ -68,6 +70,10 @@
     [super awakeFromNib];
     
     [self layoutIfNeeded];
+    
+    [self convertBtnState:YES];
+    self.oneBtn.layer.cornerRadius = 5;
+    self.twoBtn.layer.cornerRadius = 5;
     
     self.thumbnailView.delegate = self;
     self.thumbnailView.dataSource = self;
@@ -168,15 +174,29 @@
 
 
 - (IBAction)oneClip {
+
     
-    
+    [self convertBtnState:YES];
+
 }
 
 
 - (IBAction)twoClip {
     
+    [self convertBtnState:NO];
     
 }
+
+-(void)convertBtnState:(BOOL)isSelected{
+    
+    UIColor *selecteColor = [UIColor grayColor];
+    self.oneBtn.selected = isSelected;
+    self.twoBtn.selected = !isSelected;
+    self.oneBtn.backgroundColor = isSelected ? selecteColor : [UIColor clearColor];
+    self.twoBtn.backgroundColor = isSelected ? [UIColor clearColor] : selecteColor;
+}
+
+
 
 -(void)leftBtnAct:(UIPanGestureRecognizer *)pan{
     
