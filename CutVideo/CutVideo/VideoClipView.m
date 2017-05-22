@@ -59,7 +59,7 @@
     self.leftBtn.frame = CGRectMake(DefualtLayerWidth-9, 0, SliderBtnWidth, 45);
     self.rightBtn.frame = CGRectMake(self.thumbnailView.width-DefualtLayerWidth-12, 0, SliderBtnWidth, 45);
     self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, self.rightBtn.originX-self.leftBtn.maxX, 45);
-    self.gradientLayer3.frame = CGRectMake(-9, 0, self.sliderView.width+18, 45);
+    self.gradientLayer3.frame = CGRectMake(self.leftBtn.maxX-9, 0, self.rightBtn.originX-self.leftBtn.maxX+18, 45);
     
     self.gradientLayer.startPoint = CGPointMake(0, 0);
     self.gradientLayer.endPoint = CGPointMake(1, 0);
@@ -126,7 +126,7 @@
     [self.rightBtn addGestureRecognizer:rightPanGes];
     
     self.sliderView = [[UIView alloc] init];
-    self.sliderView.backgroundColor = [UIColor greenColor];
+//    self.sliderView.backgroundColor = [UIColor greenColor];
     [self.thumbnailView addSubview:self.sliderView];
     self.sliderPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(sliderViewAct:)];
     [self.sliderView addGestureRecognizer:self.sliderPanGes];
@@ -137,7 +137,7 @@
     self.gradientLayer3.colors = @[(__bridge id)VC_RGBA(48, 48, 48, 0.0).CGColor,
                                   (__bridge id)VC_RGBA(48, 48, 48, 0.0).CGColor,
                                   ];
-    [self.sliderView.layer addSublayer:self.gradientLayer3];
+    [self.theView.layer addSublayer:self.gradientLayer3];
     
 }
 
@@ -253,7 +253,7 @@
     self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, sliderWidth, 45);
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
-    self.gradientLayer3.frame = CGRectMake(-9, 0, self.sliderView.width+18, 45);
+    self.gradientLayer3.frame = CGRectMake(self.leftBtn.maxX-9, 0, self.rightBtn.originX-self.leftBtn.maxX+18, 45);
     [CATransaction commit];
 }
 
@@ -274,7 +274,7 @@
     self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, sliderWidth, 45);
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
-    self.gradientLayer3.frame = CGRectMake(-9, 0, self.sliderView.width+18, 45);
+    self.gradientLayer3.frame = CGRectMake(self.leftBtn.maxX-9, 0, self.rightBtn.originX-self.leftBtn.maxX+18, 45);
     [CATransaction commit];
 }
 
