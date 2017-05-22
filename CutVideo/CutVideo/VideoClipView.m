@@ -57,8 +57,8 @@
     self.gradientLayer.frame = self.theView.bounds;
     self.gradientLayer2.frame = self.theView.bounds;
     self.leftBtn.frame = CGRectMake(DefualtLayerWidth-9, 0, SliderBtnWidth, 45);
-    self.rightBtn.frame = CGRectMake(self.thumbnailView.width-DefualtLayerWidth-SliderBtnWidth+9, 0, SliderBtnWidth, 45);
-    self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, self.thumbnailView.width-self.leftBtn.maxX-DefualtLayerWidth-21, 45);
+    self.rightBtn.frame = CGRectMake(self.thumbnailView.width-DefualtLayerWidth-12, 0, SliderBtnWidth, 45);
+    self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, self.rightBtn.originX-self.leftBtn.maxX, 45);
     self.gradientLayer3.frame = CGRectMake(-9, 0, self.sliderView.width+18, 45);
     
     self.gradientLayer.startPoint = CGPointMake(0, 0);
@@ -126,7 +126,7 @@
     [self.rightBtn addGestureRecognizer:rightPanGes];
     
     self.sliderView = [[UIView alloc] init];
-//    self.sliderView.backgroundColor = [UIColor greenColor];
+    self.sliderView.backgroundColor = [UIColor greenColor];
     [self.thumbnailView addSubview:self.sliderView];
     self.sliderPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(sliderViewAct:)];
     [self.sliderView addGestureRecognizer:self.sliderPanGes];
@@ -249,7 +249,8 @@
         [pan.view setCenter:newCenter];
         [pan setTranslation:CGPointZero inView:self.thumbnailView];
     }
-    self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, self.rightBtn.originX-self.leftBtn.maxX, 45);
+    CGFloat sliderWidth = self.rightBtn.originX-self.leftBtn.maxX;
+    self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, sliderWidth, 45);
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     self.gradientLayer3.frame = CGRectMake(-9, 0, self.sliderView.width+18, 45);
@@ -268,7 +269,9 @@
         [pan.view setCenter:newCenter];
         [pan setTranslation:CGPointZero inView:pan.view.superview];
     }
-    self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, self.rightBtn.originX-self.leftBtn.maxX, 45);
+    
+    CGFloat sliderWidth = self.rightBtn.originX-self.leftBtn.maxX;
+    self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, sliderWidth, 45);
     [CATransaction begin];
     [CATransaction setDisableActions:YES];
     self.gradientLayer3.frame = CGRectMake(-9, 0, self.sliderView.width+18, 45);
