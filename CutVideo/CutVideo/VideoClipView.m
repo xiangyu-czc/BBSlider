@@ -13,6 +13,8 @@
 //设置rgb颜色
 #define VC_RGBA(r,g,b,a)  [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 #define VC_SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
+#define SliderBtnWidth 30  //显示的按钮宽度为12
+#define DefualtLayerWidth   60
 
 
 @interface VideoClipView()<UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
@@ -23,12 +25,13 @@
 @property (nonatomic,strong)NSMutableArray *imgViews;
 
 @property (nonatomic,strong)UIView *theView;
+@property (nonatomic,strong)UIView *sliderView;
 @property (nonatomic,strong)CAGradientLayer *gradientLayer;
 @property (nonatomic,strong)CAGradientLayer *gradientLayer2;
 
 
-@property (nonatomic,strong)UIImageView *leftBtn;
-@property (nonatomic,strong)UIImageView *rightBtn;
+@property (nonatomic,strong)UIButton *leftBtn;
+@property (nonatomic,strong)UIButton *rightBtn;
 
 @end
 
@@ -51,12 +54,14 @@
     self.gradientLayer2.frame = self.theView.bounds;
     
     //设置颜色分割点（范围：0-1）
-    float p1 = 120/self.theView.width;
+    float p1 = DefualtLayerWidth/self.theView.width;
     self.gradientLayer.locations = @[@(p1), @(p1)];
     self.gradientLayer2.locations = @[@(1-p1), @(1-p1)];
     
-    self.leftBtn.frame = CGRectMake(120, 0, 12, 45);
-    self.rightBtn.frame = CGRectMake(self.thumbnailView.width-120-12, 0, 12, 45);
+    self.leftBtn.frame = CGRectMake(DefualtLayerWidth-9, 0, SliderBtnWidth, 45);
+    self.rightBtn.frame = CGRectMake(self.thumbnailView.width-DefualtLayerWidth-SliderBtnWidth+9, 0, SliderBtnWidth, 45);
+    
+    self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, self.thumbnailView.width-self.leftBtn.maxX-DefualtLayerWidth-21, 45);
 }
 
 -(void)awakeFromNib{
@@ -91,28 +96,25 @@
                                    (__bridge id)VC_RGBA(48, 48, 48, 0.8).CGColor,
                                    ];
     [self.theView.layer addSublayer:self.gradientLayer2];
-    
-    
-    
-   
-    
-    
-    
-    
-    
 
-    self.leftBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimright"]];
-    self.leftBtn.userInteractionEnabled = YES;
+    self.leftBtn = [[UIButton alloc] init];
+    [self.leftBtn setImage:[UIImage imageNamed:@"btn_trimright"] forState:UIControlStateNormal];
     [self.theView addSubview:self.leftBtn];
     UIPanGestureRecognizer *leftPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(leftBtnAct:)];
     [self.leftBtn addGestureRecognizer:leftPanGes];
 
     
-    self.rightBtn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"btn_trimleft"]];
-    self.rightBtn.userInteractionEnabled = YES;
-    [self.thumbnailView addSubview:self.rightBtn];
+    self.rightBtn = [[UIButton alloc] init];
+    [self.rightBtn setImage:[UIImage imageNamed:@"btn_trimleft"] forState:UIControlStateNormal];
+    [self.theView addSubview:self.rightBtn];
     UIPanGestureRecognizer *rightPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(rightBtnAct:)];
     [self.rightBtn addGestureRecognizer:rightPanGes];
+    
+    self.sliderView = [[UIView alloc] init];
+//    self.sliderView.backgroundColor = [UIColor greenColor];
+    [self.thumbnailView addSubview:self.sliderView];
+    UIPanGestureRecognizer *sliderPanGes = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(sliderViewAct:)];
+    [self.sliderView addGestureRecognizer:sliderPanGes];
 
     
 }
@@ -184,8 +186,8 @@
     
         CGPoint translation = [pan translationInView:pan.view.superview];
         CGPoint newCenter = (CGPoint){pan.view.center.x + translation.x, pan.view.center.y};
-        newCenter.x = MAX(pan.view.frame.size.width/2, newCenter.x);
-        newCenter.x = MIN(self.rightBtn.originX - pan.view.frame.size.width/2,newCenter.x);
+        newCenter.x = MAX((pan.view.frame.size.width/2)-9, newCenter.x);
+        newCenter.x = MIN((self.rightBtn.originX+18) - pan.view.frame.size.width/2,newCenter.x);
 //        [CATransaction begin];
 //        [CATransaction setDisableActions:YES];
         float f = (newCenter.x/self.thumbnailView.width)/1.0;
@@ -193,11 +195,8 @@
         [pan.view setCenter:newCenter];
         [pan setTranslation:CGPointZero inView:self.thumbnailView];
 //        [CATransaction commit];
-        
-     
-        
-        
     }
+    self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, self.rightBtn.originX-self.leftBtn.maxX, 45);
 }
 
 -(void)rightBtnAct:(UIPanGestureRecognizer *)pan{
@@ -206,14 +205,36 @@
     if (pan.state == UIGestureRecognizerStateBegan || pan.state == UIGestureRecognizerStateChanged) {
         CGPoint translation = [pan translationInView:pan.view.superview];
         CGPoint newCenter = (CGPoint){pan.view.center.x + translation.x, pan.view.center.y};
-        newCenter.x = MAX(MIN(newCenter.x, self.thumbnailView.frame.size.width - pan.view.frame.size.width/2) , self.leftBtn.maxX +pan.view.frame.size.width/2);
-        pan.view.center = newCenter;
+        newCenter.x = MAX(MIN(newCenter.x, (self.thumbnailView.frame.size.width - pan.view.frame.size.width/2)+9) , self.leftBtn.maxX-18 +pan.view.frame.size.width/2);
         float f = (newCenter.x/self.thumbnailView.width)/1.0;
         self.gradientLayer2.locations = @[@(f), @(f)];
         [pan.view setCenter:newCenter];
         [pan setTranslation:CGPointZero inView:pan.view.superview];
+    }
+    self.sliderView.frame = CGRectMake(self.leftBtn.maxX, 0, self.rightBtn.originX-self.leftBtn.maxX, 45);
+}
+
+-(void)sliderViewAct:(UIPanGestureRecognizer *)pan{
+    
+    [pan.view.superview bringSubviewToFront:pan.view];
+    if (pan.state == UIGestureRecognizerStateBegan || pan.state == UIGestureRecognizerStateChanged) {
+        CGPoint translation = [pan translationInView:pan.view.superview];
+        CGPoint newCenter = (CGPoint){pan.view.center.x + translation.x, pan.view.center.y};
+        newCenter.x = MAX(pan.view.frame.size.width/2+21, newCenter.x);
+        newCenter.x = MIN(self.thumbnailView.frame.size.width-21 - pan.view.frame.size.width/2,newCenter.x);
+        pan.view.center = newCenter;
+        [pan setTranslation:CGPointZero inView:pan.view.superview];
         
     }
+    
+    self.leftBtn.originX = self.sliderView.originX-SliderBtnWidth;
+    self.rightBtn.originX = self.sliderView.maxX;
+    
+    float f = (self.leftBtn.center.x/self.thumbnailView.width)/1.0;
+    self.gradientLayer.locations = @[@(f), @(f)];
+    
+    float f2 = (self.rightBtn.center.x/self.thumbnailView.width)/1.0;
+    self.gradientLayer2.locations = @[@(f2), @(f2)];
 }
 
 
